@@ -133,7 +133,9 @@ function extrapolate(csvRowArr) {
     request.get(craftUrl(zipCode, 200), (error, response, body) => {
         if (error) throw error;
         csvRowArr[8] = getNumberOfOffices(body).toString();
-        csvRowArr[1] = getFirstOfficeDistance(body).toString();
+        if (Number(csvRowArr[8]) < Number(csvRowArr[1])) {
+            csvRowArr[1] = getFirstOfficeDistance(body).toString();
+        }
         onDomProcessingDone();
     });
 }
