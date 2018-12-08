@@ -35,6 +35,8 @@ function extrapolate(csvRowArr) {
                 i: csvRowArr[8]
             });
         }
+        outputCsvStream.uncork();
+        outputStream.uncork();
     }
 
     function getNumberOfOffices(body) {
@@ -150,7 +152,7 @@ var csvStream = fastCsv().on("data", async (data) => {
         // if (data[0] == '1773')
         extrapolate(data);
         // line += 1;
-        await sleep((line * 7000)); // 7 requests per 7 seconds aye
+        await sleep((line * 3000)); // 7 requests per 3 seconds aye
         console.log('Extrapolating...', oldLine);
     } else {
         console.log('Unknown row:', data);
