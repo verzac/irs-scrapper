@@ -70,6 +70,8 @@ function extrapolate(csvRowArr) {
         var extractedLine = irsDocument.querySelector('#main > div.body > div.content > div > table:nth-child(4) > tbody > tr:nth-child(8) > td:nth-child(2) > font');
         if (extractedLine == null) {
             // console.log('hit null!');
+            console.error(csvRowArr);
+            console.error(body);
             throw 'Cannot find Office DOM!';
         } else {
             var splitExtractedLine = extractedLine.textContent.split(" ");
@@ -151,11 +153,12 @@ var csvStream = fastCsv().on("data", async (data) => {
     line += 1;
     if (data[0] != '') {
         var oldLine = line;
+        await sleep((line * 3000)); // 7 requests per 3 seconds aye
+        console.log('Extrapolating...', oldLine);
         // if (data[0] == '1773')
         extrapolate(data);
         // line += 1;
-        await sleep((line * 3000)); // 7 requests per 3 seconds aye
-        console.log('Extrapolating...', oldLine);
+        
     } else {
         console.log('Unknown row:', data);
     }
