@@ -148,9 +148,9 @@ var csvStream = fastCsv().on("data", async (data) => {
     if (data[0] != '') {
         var oldLine = line;
         // if (data[0] == '1773')
-        // extrapolate(data);
+        extrapolate(data);
         // line += 1;
-        await sleep((line * 2000));
+        await sleep((line * 7000)); // 7 requests per 7 seconds aye
         console.log('Extrapolating...', oldLine);
     } else {
         console.log('Unknown row:', data);
