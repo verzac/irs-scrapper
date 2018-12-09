@@ -160,7 +160,16 @@ var csvStream = fastCsv().on("data", async (data) => {
         console.log('Extrapolating...', oldLine);
         // if (data[0] == '1773')
         // if (oldLine == 322)
-        extrapolate(data);
+        var tries = 0;
+        try {
+            extrapolate(data);
+        } catch (e) {
+            if (tries >= 3) {
+                throw e;
+            }
+            console.error(e);
+            console.error('Retrying...', oldLine);
+        }
         // line += 1;
         
     } else {
