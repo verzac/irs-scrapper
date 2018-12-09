@@ -12,6 +12,8 @@
     "fast-csv": "^2.4.1",
     "jsdom": "^13.0.0",
     "node-csv": "^0.1.2",
-    "request": "^2.88.0"
+    "request": "^2.88.0",
+    "requestretry": "^3.1.0",
+    "retry": "^0.12.0"
   }
 }

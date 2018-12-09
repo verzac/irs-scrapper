@@ -1,7 +1,7 @@
 const fastCsv = require('fast-csv');
 const fs = require('fs');
 const jsdom = require('jsdom');
-const request = require('request');
+const request = require('requestretry');
 const { JSDOM } = jsdom;
 
 var outputStream = fs.createWriteStream('output.csv');
@@ -53,6 +53,7 @@ function extrapolate(csvRowArr) {
             result = splitExtractedLine[splitExtractedLine.length - 1];
         }
         if (isNaN(Number(result))) {
+            console.error(body);
             throw 'result is not a number!';
         }
         return result;
@@ -156,20 +157,11 @@ var csvStream = fastCsv().on("data", async (data) => {
     line += 1;
     if (data[0] != '') {
         var oldLine = line;
-        await sleep((line * 3000)); // 7 requests per 3 seconds aye
+        await sleep((line * 1000)); // 7 requests per 3 seconds aye
         console.log('Extrapolating...', oldLine);
         // if (data[0] == '1773')
-        // if (oldLine == 322)
-        var tries = 0;
-        try {
-            extrapolate(data);
-        } catch (e) {
-            if (tries >= 3) {
-                throw e;
-            }
-            console.error(e);
-            console.error('Retrying...', oldLine);
-        }
+        // if (oldLine == 1827)
+        extrapolate(data);
         // line += 1;
         
     } else {
