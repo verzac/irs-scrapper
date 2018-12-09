@@ -64,19 +64,25 @@ function extrapolate(csvRowArr) {
     }
 
     function getFirstOfficeDistance(body) {
+        function hasValidTextContent(textContent) {
+            return /Approximately\s+\d+\s+Miles/.test(extractedLine.textContent) || extractedLine.textContent == 'Same Town/City'
+        }
         var irsDom = new JSDOM(body);
         var result;
         var irsDocument = irsDom.window.document;
         // extractedLine is something like "Approximately 2 Miles"
         var extractedLine = irsDocument.querySelector('#main > div.body > div.content > div > table:nth-child(4) > tbody > tr:nth-child(8) > td:nth-child(2) > font');
-        if (extractedLine == null || (!/Approximately\s+\d+\s+Miles/.test(extractedLine.textContent) && extractedLine.textContent != 'Same Town/City')) {
+        if (extractedLine == null || !hasValidTextContent(extractedLine.textContent)) {
             extractedLine = irsDocument.querySelector('#main > div.body > div.content > div > table:nth-child(4) > tbody > tr:nth-child(5) > td:nth-child(2) > font');
+        }
+        if (extractedLine == null || !hasValidTextContent(extractedLine.textContent)) {
+            extractedLine = irsDocument.querySelector('#main > div.body > div.content > div > table:nth-child(4) > tbody > tr:nth-child(7) > td:nth-child(2) > font');
         }
         if (extractedLine == null) {
             // console.log('hit null!');
-            console.error(body);
-            console.error(csvRowArr);
-            throw 'Cannot find Office DOM!';
+            // console.error(body);
+            console.error('Cannot find Office DOM!', csvRowArr);
+            result = -128;
         } else {
             if (/Approximately\s+\d+\s+Miles/.test(extractedLine.textContent)) {
                 var splitExtractedLine = extractedLine.textContent.split(" ");
