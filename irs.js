@@ -68,10 +68,13 @@ function extrapolate(csvRowArr) {
         var irsDocument = irsDom.window.document;
         // extractedLine is something like "Approximately 2 Miles"
         var extractedLine = irsDocument.querySelector('#main > div.body > div.content > div > table:nth-child(4) > tbody > tr:nth-child(8) > td:nth-child(2) > font');
+        if (extractedLine == null || !/Approximately\s+\d+\s+Miles/.test(extractedLine.textContent)) {
+            extractedLine = irsDocument.querySelector('#main > div.body > div.content > div > table:nth-child(4) > tbody > tr:nth-child(5) > td:nth-child(2) > font');
+        }
         if (extractedLine == null) {
             // console.log('hit null!');
-            console.error(csvRowArr);
             console.error(body);
+            console.error(csvRowArr);
             throw 'Cannot find Office DOM!';
         } else {
             var splitExtractedLine = extractedLine.textContent.split(" ");
@@ -156,6 +159,7 @@ var csvStream = fastCsv().on("data", async (data) => {
         await sleep((line * 3000)); // 7 requests per 3 seconds aye
         console.log('Extrapolating...', oldLine);
         // if (data[0] == '1773')
+        // if (oldLine == 322)
         extrapolate(data);
         // line += 1;
         
