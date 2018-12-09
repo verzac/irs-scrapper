@@ -69,7 +69,7 @@ function extrapolate(csvRowArr) {
         var irsDocument = irsDom.window.document;
         // extractedLine is something like "Approximately 2 Miles"
         var extractedLine = irsDocument.querySelector('#main > div.body > div.content > div > table:nth-child(4) > tbody > tr:nth-child(8) > td:nth-child(2) > font');
-        if (extractedLine == null) {
+        if (extractedLine == null || !/Approximately\s+\d+\s+Miles/.test(extractedLine.textContent)) {
             extractedLine = irsDocument.querySelector('#main > div.body > div.content > div > table:nth-child(4) > tbody > tr:nth-child(5) > td:nth-child(2) > font');
         }
         if (extractedLine == null) {
@@ -164,7 +164,7 @@ var csvStream = fastCsv().on("data", async (data) => {
     line += 1;
     if (data[0] != '') {
         var oldLine = line;
-        // await sleep((line * 1000)); // 7 requests per 3 seconds aye
+        await sleep((line * 1000)); // 7 requests per 3 seconds aye
         console.log('Extrapolating...', oldLine);
         // if (data[0] == '1773')
         // if (oldLine == 1825)
